@@ -32,6 +32,12 @@ while running:
 
     game.player.all_projectiles.draw(screen)
 
+    # récupérer les monstres + appliquer les images
+    for monster in game.all_monster:
+        monster.walk()
+
+    game.all_monster.draw(screen)
+
     # lisser les déplacements
     if (game.pressed.get(pygame.K_RIGHT) or game.pressed.get(pygame.K_d))\
             and game.player.rect.x + game.player.rect.width < screen.get_width():
