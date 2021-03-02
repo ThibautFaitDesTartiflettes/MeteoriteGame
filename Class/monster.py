@@ -35,3 +35,8 @@ class Monster(pygame.sprite.Sprite):
             # réapparition comme un nouveau monstre
             self.rect.x = 1080 + random.randint(0, 300)
             self.health = self.max_health
+
+            if self.game.comet_event.is_full():
+                # retirer les monstres
+                self.game.all_monster.remove(self)
+                self.game.comet_event.start_fall()

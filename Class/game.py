@@ -1,18 +1,21 @@
 import pygame
 from Class.player import Player
 from Class.monster import Monster
+from Class.comet_event import CometFallEvent
 
 
 # class game
 class Game:
 
-    def __init__(self):
+    def __init__(self, screen):
         # le jeu est commencé ?
         self.is_playing = False
         # constructeur
+        self.screen = screen
         self.all_players = pygame.sprite.Group()
         self.player = Player(self)
         self.all_players.add(self.player)
+        self.comet_event = CometFallEvent(self)
         self.all_monster = pygame.sprite.Group()
         self.pressed = {}
 
@@ -27,6 +30,9 @@ class Game:
         # actualiser barre de vie du joueur
         self.player.update_heatlhbar(screen)
 
+        # actualiser la barre de l'event des comets
+        self.comet_event.update_bar(screen)
+
         # récupérer les projectiles + appliquer les images
         for projectile in self.player.all_projectiles:
             projectile.move()
@@ -39,6 +45,12 @@ class Game:
             monster.update_heatlhbar(screen)
 
         self.all_monster.draw(screen)
+
+        # récupérer les comètes + appliquer les images
+        for comet in self.comet_event.all_comets:
+            comet.fall()
+
+        self.comet_event.all_comets.draw(screen)
 
         # lisser les déplacements
         if (self.pressed.get(pygame.K_RIGHT) or self.pressed.get(pygame.K_d)) \
@@ -58,5 +70,7 @@ class Game:
 
     def game_over(self):
         self.all_monster = pygame.sprite.Group()
+        self.comet_event.all_comets = pygame.sprite.Group()
         self.player.health = self.player.max_health
+        self.comet_event.reset_percentage()
         self.is_playing = False

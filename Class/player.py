@@ -34,7 +34,7 @@ class Player(pygame.sprite.Sprite):
         self.all_projectiles.add(Projectile(self))
 
     def damage(self, dmg):
-        if self.health - dmg > dmg:
+        if self.health - dmg >= dmg:
             self.health -= dmg
         else:
             self.game.game_over()

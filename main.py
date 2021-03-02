@@ -27,7 +27,7 @@ play_button_rect.x = math.ceil(screen.get_width() / 3.33)
 play_button_rect.y = math.ceil(screen.get_height() / 2)
 
 # charger le jeu
-game = Game()
+game = Game(screen)
 
 running = True
 
