@@ -1,5 +1,6 @@
 # ajout / initialisation de la librairie pygame
 import pygame
+import math
 # ajout référence game
 from Class.game import Game
 
@@ -12,6 +13,19 @@ screen = pygame.display.set_mode((1080, 720))
 # importer l'arrière plan
 background = pygame.image.load("assets/bg.jpg")
 
+# importer la bannière
+banner = pygame.image.load("assets/banner.png")
+banner = pygame.transform.scale(banner, (500, 500))
+banner_rect = banner.get_rect()
+banner_rect.x = math.ceil(screen.get_width() / 4)
+
+# importer le bouton
+play_button = pygame.image.load("assets/button.png")
+play_button = pygame.transform.scale(play_button, (400, 150))
+play_button_rect = play_button.get_rect()
+play_button_rect.x = math.ceil(screen.get_width() / 3.33)
+play_button_rect.y = math.ceil(screen.get_height() / 2)
+
 # charger le jeu
 game = Game()
 
@@ -23,32 +37,12 @@ while running:
     # appliquer l'arrière plan et mettre a jour
     screen.blit(background, (0, -200))
 
-    # appliquer l'image sur le joueur
-    screen.blit(game.player.image, game.player.rect)
-
-    #actualiser barre de vie du joueur
-    game.player.update_heatlhbar(screen)
-
-    # récupérer les projectiles + appliquer les images
-    for projectile in game.player.all_projectiles:
-        projectile.move()
-
-    game.player.all_projectiles.draw(screen)
-
-    # récupérer les monstres + appliquer les images
-    for monster in game.all_monster:
-        monster.walk()
-        monster.update_heatlhbar(screen)
-
-    game.all_monster.draw(screen)
-
-    # lisser les déplacements
-    if (game.pressed.get(pygame.K_RIGHT) or game.pressed.get(pygame.K_d))\
-            and game.player.rect.x + game.player.rect.width < screen.get_width():
-        game.player.move_right()
-    elif (game.pressed.get(pygame.K_LEFT) or game.pressed.get(pygame.K_q)) \
-            and game.player.rect.x > 0:
-        game.player.move_left()
+    # vérifier si le jeu a commencé
+    if game.is_playing:
+        game.update(screen)
+    else:
+        screen.blit(play_button, play_button_rect)
+        screen.blit(banner, banner_rect)
 
     pygame.display.flip()
 
@@ -58,6 +52,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+
+        # appuyer sur le bouton jouer
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if play_button_rect.collidepoint(event.pos):
+                game.start()
 
         # détection des touches + remplir dictionnaire
         elif event.type == pygame.KEYDOWN:
