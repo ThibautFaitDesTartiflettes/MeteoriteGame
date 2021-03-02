@@ -26,6 +26,9 @@ while running:
     # appliquer l'image sur le joueur
     screen.blit(game.player.image, game.player.rect)
 
+    #actualiser barre de vie du joueur
+    game.player.update_heatlhbar(screen)
+
     # récupérer les projectiles + appliquer les images
     for projectile in game.player.all_projectiles:
         projectile.move()
@@ -35,6 +38,7 @@ while running:
     # récupérer les monstres + appliquer les images
     for monster in game.all_monster:
         monster.walk()
+        monster.update_heatlhbar(screen)
 
     game.all_monster.draw(screen)
 
