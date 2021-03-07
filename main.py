@@ -6,6 +6,10 @@ from Class.game import Game
 
 pygame.init()
 
+# définir une clock
+clock = pygame.time.Clock()
+FPS = 100
+
 # générer la fenêtre de notre jeu
 pygame.display.set_caption("MeteoriteFallGame")
 screen = pygame.display.set_mode((1080, 720))
@@ -68,3 +72,6 @@ while running:
 
         elif event.type == pygame.KEYUP:
             game.pressed[event.key] = False
+
+    # fixer le nombre de FPS de la clock
+    clock.tick(FPS)

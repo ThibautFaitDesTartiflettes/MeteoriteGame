@@ -1,6 +1,7 @@
 import pygame
 from Class.player import Player
-from Class.monster import Monster
+from Class.monster import Monster, Mummy
+from Class.monster import Monster, Alien
 from Class.comet_event import CometFallEvent
 
 
@@ -21,7 +22,9 @@ class Game:
 
     def start(self):
         self.is_playing = True
-        self.spawn_monster(2)
+        self.spawn_monster(Mummy)
+        self.spawn_monster(Mummy)
+        self.spawn_monster(Alien)
 
     def update(self, screen):
         # appliquer l'image sur le joueur
@@ -64,10 +67,8 @@ class Game:
                 and self.player.rect.x > 0:
             self.player.move_left()
 
-    def spawn_monster(self, number):
-        while number != 0:
-            self.all_monster.add(Monster(self))
-            number = number - 1
+    def spawn_monster(self, monster_name):
+        self.all_monster.add(monster_name.__call__(self))
 
     def check_colission(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
