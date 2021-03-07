@@ -33,6 +33,9 @@ class Game:
         # actualiser la barre de l'event des comets
         self.comet_event.update_bar(screen)
 
+        # actualiser l'animation du joueur
+        self.player.update_animation()
+
         # récupérer les projectiles + appliquer les images
         for projectile in self.player.all_projectiles:
             projectile.move()
@@ -43,6 +46,7 @@ class Game:
         for monster in self.all_monster:
             monster.walk()
             monster.update_heatlhbar(screen)
+            monster.update_animation()
 
         self.all_monster.draw(screen)
 

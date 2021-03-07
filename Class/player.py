@@ -1,22 +1,25 @@
 import pygame
 from Class.projectile import Projectile
+from Animation import animation
 
 
 # classe joueur
-class Player(pygame.sprite.Sprite):
+class Player(animation.AnimateSprite):
 
     def __init__(self, game):
-        super().__init__()
+        super().__init__("player")
         self.game = game
         self.health = 150
         self.max_health = 150
         self.attack = 10
         self.velocity = 2
         self.all_projectiles = pygame.sprite.Group()
-        self.image = pygame.image.load("assets/player.png")
         self.rect = self.image.get_rect()
         self.rect.x = 400
         self.rect.y = 500
+
+    def update_animation(self):
+        self.animate()
 
     def update_heatlhbar(self, surface):
         # couleur + position + largeur et épaisseur de la barre de vie
@@ -32,6 +35,7 @@ class Player(pygame.sprite.Sprite):
 
     def launch_projectile(self):
         self.all_projectiles.add(Projectile(self))
+        self.start_animation()
 
     def damage(self, dmg):
         if self.health - dmg >= dmg:
