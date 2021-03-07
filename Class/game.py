@@ -1,9 +1,9 @@
 import pygame
 from Class.player import Player
-from Class.monster import Monster, Mummy
-from Class.monster import Monster, Alien
+from Class.monster import Mummy
+from Class.monster import Alien
 from Class.comet_event import CometFallEvent
-
+from Sound.sounds import SoundManager
 
 # class game
 class Game:
@@ -18,6 +18,9 @@ class Game:
         self.all_players.add(self.player)
         self.comet_event = CometFallEvent(self)
         self.all_monster = pygame.sprite.Group()
+        self.sound_manager = SoundManager()
+        self.font = pygame.font.SysFont("monospace", 16)
+        self.score = 0
         self.pressed = {}
 
     def start(self):
@@ -27,6 +30,10 @@ class Game:
         self.spawn_monster(Alien)
 
     def update(self, screen):
+        # afficher le score sur l'écran
+        score_text = self.font.render(f"Score : {self.score}", True, (0, 0, 0))
+        screen.blit(score_text, (20, 20))
+
         # appliquer l'image sur le joueur
         screen.blit(self.player.image, self.player.rect)
 
@@ -73,9 +80,14 @@ class Game:
     def check_colission(self, sprite, group):
         return pygame.sprite.spritecollide(sprite, group, False, pygame.sprite.collide_mask)
 
+    def add_score(self, points):
+        self.score += points
+
     def game_over(self):
         self.all_monster = pygame.sprite.Group()
         self.comet_event.all_comets = pygame.sprite.Group()
         self.player.health = self.player.max_health
         self.comet_event.reset_percentage()
+        self.score = 0
+        self.sound_manager.play("game_over")
         self.is_playing = False

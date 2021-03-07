@@ -15,6 +15,7 @@ class Monster(animation.AnimateSprite):
         self.rect = self.image.get_rect()
         self.velocity = 1
         self.default_speed = 1
+        self.loot_amount = 10
         self.rect.x = 1080 + random.randint(0, 300)
         self.rect.y = 540 - offset
         self.start_animation()
@@ -31,6 +32,9 @@ class Monster(animation.AnimateSprite):
         self.default_speed = speed
         self.velocity = random.randint(1, speed)
 
+    def set_loot_amount(self, amount):
+        self.loot_amount = amount
+
     def walk(self):
         if not self.game.check_colission(self, self.game.all_players):
             self.rect.x -= self.velocity
@@ -44,6 +48,7 @@ class Monster(animation.AnimateSprite):
             # réapparition comme un nouveau monstre
             self.rect.x = 1080 + random.randint(0, 300)
             self.velocity = random.randint(1, self.default_speed)
+            self.game.add_score(self.loot_amount)
             self.health = self.max_health
 
             if self.game.comet_event.is_full():
@@ -58,6 +63,7 @@ class Mummy(Monster):
     def __init__(self, game):
         super().__init__(game, "mummy", (130, 130))
         self.set_speed(3)
+        self.set_loot_amount(10)
 
 
 # définir une classe pour la momie
@@ -69,3 +75,4 @@ class Alien(Monster):
         self.max_health = 250
         self.set_speed(1)
         self.attack = 0.8
+        self.set_loot_amount(30)

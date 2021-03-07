@@ -36,6 +36,7 @@ class Player(animation.AnimateSprite):
     def launch_projectile(self):
         self.all_projectiles.add(Projectile(self))
         self.start_animation()
+        self.game.sound_manager.play("tir")
 
     def damage(self, dmg):
         if self.health - dmg >= dmg:

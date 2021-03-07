@@ -61,10 +61,15 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if play_button_rect.collidepoint(event.pos):
                 game.start()
+                game.sound_manager.play("click")
 
         # détection des touches + remplir dictionnaire
         elif event.type == pygame.KEYDOWN:
             game.pressed[event.key] = True
+
+            if event.key == pygame.K_SPACE:
+                if not game.is_playing:
+                    game.start()
 
             # detection de la touche de lancement d'un projectile
             if event.key == pygame.K_SPACE or event.key == pygame.K_e:
